@@ -1,0 +1,54 @@
+name: CI JF
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+
+      # JFrog CLI Setup with OIDC Authentication
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v4
+        env:
+          JF_URL: ${{ vars.JF_URL }}
+        with:
+          oidc-provider-name: setup-jfrog-cli
+
+      # Set Build Name and Number
+      - name: Set Build Info
+        run: |
+          export BUILD_NAME="github-actions-demo-build-main-jf"
+          export BUILD_NUMBER=${{ github.run_id }}
+          jfrog rt build-collect-env $BUILD_NAME $BUILD_NUMBER
+
+      # Upload Build Artifacts to JFrog
+      - name: Upload Build Artifacts to JFrog
+        run: |
+          jfrog rt upload "dist/*" "dorr-npm/" --build-name=github-actions-demo-build-main-jf --build-number=${{ github.run_id }}
+
+      # Publish Build Info to JFrog
+      - name: Publish Build Info
+        run: |
+          jfrog rt build-publish github-actions-demo-build-main-jf ${{ github.run_id }}
+
+      # Optional: Scan Build with JFrog Xray
+      - name: Scan Build with JFrog Xray
+        run: |
+          jfrog rt build-scan github-actions-demo-build-main-jf ${{ github.run_id }}
