@@ -24,6 +24,8 @@
   "scripts": {
     "start": "node index.js",
     "test": "mocha ./tests --recursive",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "build": "echo 'No build step required'",
+    "pack": "npm pack"
   }
 }

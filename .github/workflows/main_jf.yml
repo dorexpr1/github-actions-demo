@@ -58,7 +58,7 @@ jobs:
       # Upload Build Artifacts to JFrog
       - name: Upload Build Artifacts to JFrog
         run: |
-          jfrog rt upload "dist/*" "dorr-npm/" --build-name=github-actions-demo-build-main-jf --build-number=${{ github.run_id }}
+          jfrog rt upload "*.tgz" "dorr-npm/" --build-name=github-actions-demo-build-main-jf --build-number=${{ github.run_id }}
 
       # Publish Build Info to JFrog
       - name: Publish Build Info
