@@ -71,4 +71,4 @@ jobs:
       # Optional: Scan Build with JFrog Xray
       - name: Scan Build with JFrog Xray
         run: |
-          jfrog rt build-scan github-actions-demo-build-main-jf ${{ github.run_id }}
+          jfrog build-scan github-actions-demo-build-main-jf ${{ github.run_id }}
