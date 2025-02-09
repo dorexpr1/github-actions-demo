@@ -40,6 +40,9 @@ jobs:
       - name: Run Tests
         run: npm test
 
+      - name: Create Tarball
+        run: npm pack
+
       # JFrog CLI Setup with OIDC Authentication
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
